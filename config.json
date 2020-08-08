@@ -1,0 +1,11 @@
+{
+  "sort": "bing",
+  "bing": {
+    "mode":"random"
+  },
+  "baidu": {
+    "word": "壁纸"
+  },
+  "log": true,
+  "wallPath": ".wall"
+}

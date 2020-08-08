@@ -1,11 +1,11 @@
 {
-  "sort": "bing",
+  "sort": "baidu",
   "bing": {
-    "mode":"random"
+    "mode": "random"
   },
   "baidu": {
-    "word": "壁纸"
+    "word": "壁纸",
+    "download": true
   },
-  "log": true,
-  "wallPath": ".wall"
+  "log": true
 }

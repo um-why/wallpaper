@@ -10,17 +10,17 @@ import (
 )
 
 type Config struct {
-	Sort     string
-	Bing     ConfigBing
-	Baidu    ConfigBaidu
-	Log      bool
-	WallPath string
+	Sort  string
+	Bing  ConfigBing
+	Baidu ConfigBaidu
+	Log   bool
 }
 type ConfigBing struct {
 	Mode string
 }
 type ConfigBaidu struct {
-	Word string
+	Word     string
+	Download bool
 }
 
 func getConfig(filename string) Config {
@@ -45,21 +45,27 @@ func main() {
 		wall.OpenLog(path + "/log.txt")
 	}
 
-	var file string
 	switch setting.Sort {
 	case "bing":
 		url, filename := wall.GetBingImageURL()
-		wall.DownloadImage(url, path+"/"+setting.WallPath+"/", filename)
+		wall.DownloadImage(url, path+"/.wall/", filename)
+
+		var file string
 		if setting.Bing.Mode == "today" {
-			file = path + "/" + setting.WallPath + "/" + filename
+			file = path + "/.wall/" + filename
 		} else {
-			file = wall.GetRandomFile(path + "/" + setting.WallPath + "/")
+			file = wall.GetRandomFile(path + "/.wall/")
 		}
+		rw.SetFromFile(file)
 	case "baidu":
-		fallthrough
+		url, filename := wall.GetBaiduImageURL(setting.Baidu.Word)
+		if setting.Baidu.Download == false {
+			rw.SetFromURL(url)
+		} else {
+			wall.DownloadImage(url, path+"/.wall/", filename)
+			rw.SetFromFile(path + "/.wall/" + filename)
+		}
 	default:
 		log.Fatal("配置错误")
 	}
-
-	rw.SetFromFile(file)
 }

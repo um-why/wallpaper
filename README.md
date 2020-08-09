@@ -11,9 +11,9 @@
 
 #### 1. 获取程序
 
-- 去 [https://github.com/um-why/wallpaper/releases](https://github.com/um-why/wallpaper/releases) 直接下载构建后的合适版本的zip压缩包。
+- 去 [https://gitee.com/um-why/wallpaper/releases](https://gitee.com/um-why/wallpaper/releases) 直接下载构建后的合适版本的zip压缩包。
 
-- 或克隆源代码 `git clone https://github.com/um-why/wallpaper.git` ，自己构建 `go build -ldflags "-H windowsgui" main.go` 。
+- 或克隆源代码 `git clone https://gitee.com/um-why/wallpaper.git` ，自己构建 `go build -ldflags "-H windowsgui" main.go` 。
 
 - 将下载的zip压缩包，解压到任意文件夹中；建议解压到非系统盘文件下中。
 
@@ -25,7 +25,7 @@
 
 ```json
 {
-  "sort": "baidu",
+  "sort": "bing",
   "bing": {
     "mode": "random"
   },
@@ -51,7 +51,7 @@
       "壁纸 名车 兰博基尼",
       "壁纸 名车 路虎"
     ],
-    "download": true
+    "download": false
   },
   "log": true
 }
@@ -88,17 +88,17 @@ baidu.download: 可设置为 true / false，百度壁纸图片是否下载
 
 百度图片搜索关键词壁纸，如下图：
 
-![百度壁纸默认搜索关键词](wall/baidu-word.jpg "关键词:壁纸")
+![百度壁纸默认搜索关键词](https://gitee.com/um-why/wallpaper/raw/master/wall/baidu-word.jpg "关键词:壁纸")
 
 上图左侧可以看到，更多图片类型的选择。
 
 选择“不同风格”中的“唯美”，如下图：
 
-![百度壁纸搜索壁纸 不同风格 唯美](wall/baidu-word-1.jpg "关键词:壁纸 不同风格 唯美")
+![百度壁纸搜索壁纸 不同风格 唯美](https://gitee.com/um-why/wallpaper/raw/master/wall/baidu-word-1.jpg "关键词:壁纸 不同风格 唯美")
 
 选择“动物”中的“狗狗”，如下图:
 
-![百度壁纸搜索壁纸 动物 狗狗](wall/baidu-word-2.jpg "关键词:壁纸 动物 狗狗")
+![百度壁纸搜索壁纸 动物 狗狗](https://gitee.com/um-why/wallpaper/raw/master/wall/baidu-word-2.jpg "关键词:壁纸 动物 狗狗")
 
 通过上面两个例子，是让您清楚本程序百度壁纸的来源；比如您喜欢设置 **唯美** 类图片作为您的桌面壁纸，在百度壁纸搜索关键词的 `baidu.word` 设置项中，添加 `"壁纸 不同风格 唯美",` 即可实现。
 

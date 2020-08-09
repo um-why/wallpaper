@@ -19,7 +19,7 @@ type ConfigBing struct {
 	Mode string
 }
 type ConfigBaidu struct {
-	Word     string
+	Word     []string
 	Download bool
 }
 
@@ -58,7 +58,8 @@ func main() {
 		}
 		rw.SetFromFile(file)
 	case "baidu":
-		url, filename := wall.GetBaiduImageURL(setting.Baidu.Word)
+		words := wall.GetRandomWork(setting.Baidu.Word)
+		url, filename := wall.GetBaiduImageURL(words)
 		if setting.Baidu.Download == false {
 			rw.SetFromURL(url)
 		} else {

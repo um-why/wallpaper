@@ -13,7 +13,7 @@ type Config struct {
 	Sort  string
 	Bing  ConfigBing
 	Baidu ConfigBaidu
-	Zol ConfigZol
+	Zol   ConfigZol
 	Log   bool
 }
 type ConfigBing struct {
@@ -75,9 +75,12 @@ func main() {
 	case "zol":
 		sort := wall.GetRandomWord(setting.Zol.Sort)
 		url, filename := wall.GetZolImageURL(sort)
-		fmt.Println(url)
-		fmt.Println(filename)
-
+		if setting.Zol.Download == false {
+			rw.SetFromURL(url)
+		} else {
+			wall.DownloadImage(url, path+"/.wall/", filename)
+			rw.SetFromFile(path + "/.wall/" + filename)
+		}
 	default:
 		log.Fatal("配置错误")
 	}

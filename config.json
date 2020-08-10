@@ -29,7 +29,6 @@
   },
   "zol": {
     "sort": [
-      "全部",
       "风景",
       "动漫",
       "美女",
@@ -55,7 +54,7 @@
       "背景",
       "其他"
     ],
-    "download": true
+    "download": false
   },
   "log": true
 }

@@ -15,7 +15,7 @@ import (
 	"time"
 )
 
-func GetRandomWork(words []string)string{
+func GetRandomWord(words []string)string{
 	if len(words)==0{
 		return "壁纸"
 	}
@@ -25,7 +25,7 @@ func GetRandomWork(words []string)string{
 	return words[randIndex]
 }
 
-func getWinScreenSize(nIndex int) int {
+func GetWinScreenSize(nIndex int) int {
 	rs, _, _ := syscall.NewLazyDLL("User32.dll").NewProc("GetSystemMetrics").Call(uintptr(nIndex))
 	return int(rs)
 }
@@ -34,8 +34,8 @@ func GetBaiduImageURL(word string) (imgURL string, imgFilename string) {
 	searchUrl := "https://image.baidu.com/search/index?tn=baiduimage&word="
 	searchUrl += url.QueryEscape(word)
 	searchUrl = strings.Replace(searchUrl,"+","%20",-1)
-	searchUrl += "&width=" + strconv.Itoa(getWinScreenSize(0))
-	searchUrl += "&height=" + strconv.Itoa(getWinScreenSize(1))
+	searchUrl += "&width=" + strconv.Itoa(GetWinScreenSize(0))
+	searchUrl += "&height=" + strconv.Itoa(GetWinScreenSize(1))
 
 	response, err := http.Get(searchUrl)
 	if err != nil {

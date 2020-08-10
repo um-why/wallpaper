@@ -13,6 +13,7 @@ type Config struct {
 	Sort  string
 	Bing  ConfigBing
 	Baidu ConfigBaidu
+	Zol ConfigZol
 	Log   bool
 }
 type ConfigBing struct {
@@ -20,6 +21,11 @@ type ConfigBing struct {
 }
 type ConfigBaidu struct {
 	Word     []string
+	Download bool
+}
+
+type ConfigZol struct {
+	Sort     []string
 	Download bool
 }
 
@@ -58,7 +64,7 @@ func main() {
 		}
 		rw.SetFromFile(file)
 	case "baidu":
-		words := wall.GetRandomWork(setting.Baidu.Word)
+		words := wall.GetRandomWord(setting.Baidu.Word)
 		url, filename := wall.GetBaiduImageURL(words)
 		if setting.Baidu.Download == false {
 			rw.SetFromURL(url)
@@ -66,6 +72,12 @@ func main() {
 			wall.DownloadImage(url, path+"/.wall/", filename)
 			rw.SetFromFile(path + "/.wall/" + filename)
 		}
+	case "zol":
+		sort := wall.GetRandomWord(setting.Zol.Sort)
+		url, filename := wall.GetZolImageURL(sort)
+		fmt.Println(url)
+		fmt.Println(filename)
+
 	default:
 		log.Fatal("配置错误")
 	}

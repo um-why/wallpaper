@@ -15,7 +15,7 @@ import (
 	"time"
 )
 
-func GetRandomWork(words []string)string{
+func GetRandomWord(words []string)string{
 	if len(words)==0{
 		return "壁纸"
 	}

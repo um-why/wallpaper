@@ -67,9 +67,9 @@ func GetZolImageURL(sort string) (imgURL string, imgFilename string) {
 	sort = sortDict(sort)
 	homeUrl := ""
 	if sort == "pc" {
-		homeUrl = "http://desk.zol.com.cn/4096x2160/"
+		homeUrl = "http://desk.zol.com.cn/"
 	} else {
-		homeUrl = "http://desk.zol.com.cn/" + sort + "/4096x2160/"
+		homeUrl = "http://desk.zol.com.cn/" + sort + "/"
 	}
 
 	response, err := http.Get(homeUrl)

@@ -64,6 +64,8 @@ func getSuitablePixel() string {
 }
 
 func GetZolImageURL(sort string) (imgURL string, imgFilename string) {
+	defer SetRandomWall()
+
 	sort = sortDict(sort)
 	homeUrl := ""
 	if sort == "pc" {
@@ -74,7 +76,7 @@ func GetZolImageURL(sort string) (imgURL string, imgFilename string) {
 
 	response, err := http.Get(homeUrl)
 	if err != nil {
-		log.Fatal(err)
+		panic(err)
 	}
 	defer response.Body.Close()
 
@@ -82,7 +84,7 @@ func GetZolImageURL(sort string) (imgURL string, imgFilename string) {
 	htmlData, _ := ioutil.ReadAll(response.Body)
 	objectUrl := re.FindAllString(string(htmlData), -1)
 	if len(objectUrl) <= 0 {
-		log.Fatal("未找到ZOL " + sort + "壁纸图片")
+		panic("未找到ZOL " + sort + " 分类的壁纸图片")
 	}
 
 	rand.Seed(time.Now().Unix())
@@ -94,7 +96,7 @@ func GetZolImageURL(sort string) (imgURL string, imgFilename string) {
 
 	response, err = http.Get(detailUrl)
 	if err != nil {
-		log.Fatal(err)
+		panic(err)
 	}
 	defer response.Body.Close()
 
@@ -102,7 +104,7 @@ func GetZolImageURL(sort string) (imgURL string, imgFilename string) {
 	htmlData, _ = ioutil.ReadAll(response.Body)
 	objectUrl = re.FindAllString(string(htmlData), -1)
 	if len(objectUrl) <= 0 {
-		log.Fatal("ZOL壁纸图片解析错误")
+		panic("ZOL壁纸图片解析错误")
 	}
 
 	rand.Seed(time.Now().Unix())
@@ -110,7 +112,7 @@ func GetZolImageURL(sort string) (imgURL string, imgFilename string) {
 
 	imgURL = objectUrl[randIndex]
 	if strings.Index(imgURL, "##SIZE##") == -1 {
-		log.Fatal("ZOL壁纸图片规则获取错误")
+		panic("ZOL壁纸图片规则错误")
 	}
 	size := getSuitablePixel()
 	if size == "" {

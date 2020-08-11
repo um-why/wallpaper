@@ -7,16 +7,21 @@ import (
 	"regexp"
 )
 
-func GetBingImageURL()(imgURL string, imgFilename string){
+func GetBingImageURL() (imgURL string, imgFilename string) {
+	defer SetRandomWall()
+
 	response, err := http.Get("https://www.bing.com/")
 	if err != nil {
-		log.Fatal(err)
+		panic(err)
 	}
 	defer response.Body.Close()
 
 	re := regexp.MustCompile("data-ultra-definition-src=\".+?\\.jpg")
 	htmlData, _ := ioutil.ReadAll(response.Body)
 	imgURL = re.FindString(string(htmlData))
+	if imgURL == "" {
+		panic("未找到BING的壁纸图片")
+	}
 	imgURL = imgURL[28:]
 	imgFilename = imgURL[6:]
 

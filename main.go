@@ -54,13 +54,13 @@ func main() {
 	switch setting.Sort {
 	case "bing":
 		url, filename := wall.GetBingImageURL()
-		wall.DownloadImage(url, path+"/.wall/", filename)
+		wall.DownloadImage(url, filename)
 
 		var file string
 		if setting.Bing.Mode == "today" {
-			file = path + "/.wall/" + filename
+			file = wall.GetWallpaperSavePath() + filename
 		} else {
-			file = wall.GetRandomFile(path + "/.wall/")
+			file = wall.GetRandomFile(wall.GetWallpaperSavePath())
 		}
 		rw.SetFromFile(file)
 	case "baidu":
@@ -69,8 +69,8 @@ func main() {
 		if setting.Baidu.Download == false {
 			rw.SetFromURL(url)
 		} else {
-			wall.DownloadImage(url, path+"/.wall/", filename)
-			rw.SetFromFile(path + "/.wall/" + filename)
+			wall.DownloadImage(url, filename)
+			rw.SetFromFile(wall.GetWallpaperSavePath() + filename)
 		}
 	case "zol":
 		sort := wall.GetRandomWord(setting.Zol.Sort)
@@ -78,8 +78,8 @@ func main() {
 		if setting.Zol.Download == false {
 			rw.SetFromURL(url)
 		} else {
-			wall.DownloadImage(url, path+"/.wall/", filename)
-			rw.SetFromFile(path + "/.wall/" + filename)
+			wall.DownloadImage(url, filename)
+			rw.SetFromFile(wall.GetWallpaperSavePath() + filename)
 		}
 	default:
 		log.Fatal("配置错误")

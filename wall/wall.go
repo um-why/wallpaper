@@ -10,12 +10,17 @@ import (
 	"os/exec"
 	"path/filepath"
 	"time"
+	"github.com/reujab/wallpaper"
 )
 
 func GetCurrentPath() string {
 	file, _ := exec.LookPath(os.Args[0])
 	path, _ := filepath.Abs(file)
 	return filepath.Dir(path)
+}
+
+func GetWallpaperSavePath() string {
+	return GetCurrentPath() + "/.wall/"
 }
 
 func OpenLog(file string) {
@@ -26,17 +31,21 @@ func OpenLog(file string) {
 	log.SetOutput(logFile)
 }
 
-func DownloadImage(url string, filepath string, filename string) {
+func DownloadImage(url string, filename string) {
+	defer SetRandomWall()
+
+	filepath := GetWallpaperSavePath()
+
 	dirExists, err := exists(filepath)
 	if err != nil {
-		log.Fatal("寻找壁纸目录错误\n", err)
+		panic(err)
 	}
 
 	if !dirExists {
 		err = os.Mkdir(filepath, 0777)
 
 		if err != nil {
-			log.Fatal("壁纸目录创建错误\n", err)
+			panic(err)
 		}
 	}
 
@@ -45,7 +54,7 @@ func DownloadImage(url string, filepath string, filename string) {
 	if !fileExists {
 		response, err := http.Get(url)
 		if err != nil {
-			log.Fatal("图片下载错误\n", err)
+			panic(err)
 		}
 		defer response.Body.Close()
 
@@ -56,13 +65,13 @@ func DownloadImage(url string, filepath string, filename string) {
 
 		file, err := os.Create(imageFilePath)
 		if err != nil {
-			log.Fatal("图片文件创建错误\n", err)
+			panic(err)
 		}
 		defer file.Close()
 
 		_, err = io.Copy(file, response.Body)
 		if err != nil {
-			log.Fatal("图片保存错误\n", err)
+			panic(err)
 		}
 	} else {
 		log.Println("图文已存在，跳过下载")
@@ -82,8 +91,20 @@ func exists(path string) (bool, error) {
 
 func GetRandomFile(path string) string {
 	files, _ := ioutil.ReadDir(path)
+	if len(files) == 0 {
+		log.Fatal("未找到本地壁纸图片")
+	}
+
 	rand.Seed(time.Now().Unix())
 	randIndex := rand.Intn(len(files))
 	log.Println("随机获取的壁纸文件为:" + files[randIndex].Name())
 	return path + files[randIndex].Name()
+}
+
+func SetRandomWall() {
+	if err := recover(); err != nil {
+		file := GetRandomFile(GetWallpaperSavePath())
+		wallpaper.SetFromFile(file)
+		log.Fatal(err)
+	}
 }

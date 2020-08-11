@@ -15,9 +15,9 @@ import (
 	"time"
 )
 
-func GetRandomWord(words []string)string{
-	if len(words)==0{
-		return "壁纸"
+func GetRandomWord(words []string) string {
+	if len(words) == 0 {
+		return ""
 	}
 
 	rand.Seed(time.Now().Unix())
@@ -31,15 +31,21 @@ func GetWinScreenSize(nIndex int) int {
 }
 
 func GetBaiduImageURL(word string) (imgURL string, imgFilename string) {
+	defer SetRandomWall()
+
+	if word == "" {
+		word = "壁纸"
+	}
+
 	searchUrl := "https://image.baidu.com/search/index?tn=baiduimage&word="
 	searchUrl += url.QueryEscape(word)
-	searchUrl = strings.Replace(searchUrl,"+","%20",-1)
+	searchUrl = strings.Replace(searchUrl, "+", "%20", -1)
 	searchUrl += "&width=" + strconv.Itoa(GetWinScreenSize(0))
 	searchUrl += "&height=" + strconv.Itoa(GetWinScreenSize(1))
 
 	response, err := http.Get(searchUrl)
 	if err != nil {
-		log.Fatal(err)
+		panic(err)
 	}
 	defer response.Body.Close()
 
@@ -47,7 +53,7 @@ func GetBaiduImageURL(word string) (imgURL string, imgFilename string) {
 	htmlData, _ := ioutil.ReadAll(response.Body)
 	objectUrl := re.FindAllString(string(htmlData), -1)
 	if len(objectUrl) <= 0 {
-		log.Fatal("未找到百度壁纸图片")
+		panic("未找到搜索关键词: " + word + " 的百度壁纸图片")
 	}
 
 	rand.Seed(time.Now().Unix())

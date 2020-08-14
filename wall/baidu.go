@@ -11,7 +11,6 @@ import (
 	"regexp"
 	"strconv"
 	"strings"
-	"syscall"
 	"time"
 )
 
@@ -25,11 +24,6 @@ func GetRandomWord(words []string) string {
 	return words[randIndex]
 }
 
-func GetWinScreenSize(nIndex int) int {
-	rs, _, _ := syscall.NewLazyDLL("User32.dll").NewProc("GetSystemMetrics").Call(uintptr(nIndex))
-	return int(rs)
-}
-
 func GetBaiduImageURL(word string) (imgURL string, imgFilename string) {
 	defer SetRandomWall()
 
@@ -40,8 +34,14 @@ func GetBaiduImageURL(word string) (imgURL string, imgFilename string) {
 	searchUrl := "https://image.baidu.com/search/index?tn=baiduimage&word="
 	searchUrl += url.QueryEscape(word)
 	searchUrl = strings.Replace(searchUrl, "+", "%20", -1)
-	searchUrl += "&width=" + strconv.Itoa(GetWinScreenSize(0))
-	searchUrl += "&height=" + strconv.Itoa(GetWinScreenSize(1))
+	width := GetWinScreenSize(0)
+	if width != 0 {
+		searchUrl += "&width=" + strconv.Itoa(width)
+	}
+	height := GetWinScreenSize(1)
+	if height != 0 {
+		searchUrl += "&height=" + strconv.Itoa(height)
+	}
 
 	response, err := http.Get(searchUrl)
 	if err != nil {

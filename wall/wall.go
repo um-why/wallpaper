@@ -84,7 +84,7 @@ func DownloadImage(url string, filename string) {
 			panic(err)
 		}
 	} else {
-		log.Println("图文已存在，跳过下载")
+		log.Println("图片已存在，跳过下载")
 	}
 }
 

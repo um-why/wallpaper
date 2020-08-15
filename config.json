@@ -1,5 +1,9 @@
 {
-  "sort": "bing",
+  "sort": [
+    "bing",
+    "baidu",
+    "zol"
+  ],
   "bing": {
     "mode": "random"
   },

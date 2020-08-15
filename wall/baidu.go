@@ -14,16 +14,6 @@ import (
 	"time"
 )
 
-func GetRandomWord(words []string) string {
-	if len(words) == 0 {
-		return ""
-	}
-
-	rand.Seed(time.Now().Unix())
-	randIndex := rand.Intn(len(words))
-	return words[randIndex]
-}
-
 func GetBaiduImageURL(word string) (imgURL string, imgFilename string) {
 	defer SetRandomWall()
 

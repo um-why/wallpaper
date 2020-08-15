@@ -31,6 +31,16 @@ func OpenLog(file string) {
 	log.SetOutput(logFile)
 }
 
+func GetRandomWord(words []string) string {
+	if len(words) == 0 {
+		return ""
+	}
+
+	rand.Seed(time.Now().Unix())
+	randIndex := rand.Intn(len(words))
+	return words[randIndex]
+}
+
 func DownloadImage(url string, filename string) {
 	defer SetRandomWall()
 

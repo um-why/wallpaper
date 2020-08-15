@@ -2,7 +2,6 @@ package main
 
 import (
 	"encoding/json"
-	"fmt"
 	"io/ioutil"
 	"log"
 	"wallpaper/wall"
@@ -10,7 +9,7 @@ import (
 )
 
 type Config struct {
-	Sort  string
+	Sort  []string
 	Bing  ConfigBing
 	Baidu ConfigBaidu
 	Zol   ConfigZol
@@ -29,15 +28,29 @@ type ConfigZol struct {
 	Download bool
 }
 
-func getConfig(filename string) Config {
+func getConfig(filename string) (setting Config) {
+	defer func() {
+		if err := recover(); err != nil {
+			if len(setting.Sort) == 0 {
+				setting.Sort = append(setting.Sort, "bing")
+			}
+
+			if setting.Bing.Mode != "today" {
+				setting.Bing.Mode = "random"
+			}
+
+			setting.Log = true
+		}
+	}()
+
 	content, err := ioutil.ReadFile(filename)
 	if err != nil {
-		fmt.Println("配置文件获取错误")
+		panic("配置文件获取错误")
+
 	}
-	var setting Config
 	err = json.Unmarshal(content, &setting)
 	if err != nil {
-		fmt.Println("配置文件解析错误")
+		panic("配置文件解析错误")
 	}
 	return setting
 }
@@ -51,7 +64,8 @@ func main() {
 		wall.OpenLog(path + "/log.txt")
 	}
 
-	switch setting.Sort {
+	sort := wall.GetRandomWord(setting.Sort)
+	switch sort {
 	case "bing":
 		url, filename := wall.GetBingImageURL()
 		wall.DownloadImage(url, filename)

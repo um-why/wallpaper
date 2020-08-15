@@ -1,12 +1,12 @@
 # wallpaper
-一个简单的go随机更换壁纸程序，从Bing、Baidu、ZOL抓取下载图片并设置为桌面壁纸
+桌面壁纸随机更换程序，从Bing、Baidu、ZOL抓取图片设置为桌面壁纸；支持windows、Linux、Mac系统
 
 ## 简介
 
 1. 设置桌面壁纸，最少系统资源占用；绿色、无广告、无监控；
 2. bing壁纸质量好；本程序自动下载，长期积累下来，您的壁纸就是完美极致的风景大片；
 3. zol壁纸自动挑选适配本机屏幕分辨率图片；
-4. baidu壁纸自动适配本机屏幕分辨率；(部分图片可能质量不好)
+4. baidu壁纸自动适配本机屏幕分辨率；
 5. 无网络情况下，随机挑选本程序积累下载来的图片作为壁纸。
 
 ## 启动壁纸切换
@@ -27,7 +27,11 @@
 
 ```json
 {
-  "sort": "bing",
+  "sort": [
+    "bing",
+    "baidu",
+    "zol"
+  ],
   "bing": {
     "mode": "random"
   },
@@ -49,7 +53,7 @@
       "美女",
       "创意"
     ],
-    "download": false
+    "download": true
   },
   "log": true
 }
@@ -100,7 +104,9 @@ zol.download: 可设置为 true / false，ZOL壁纸图片是否下载
 如果您喜欢每日更换一次桌面壁纸；建议设置为桌面壁纸来源于bing、不随机即可，程序配置如下：
 
 {
-  "sort": "bing",
+  "sort":  [
+    "bing"
+  ],
   "bing": {
     "mode": "today"
   }
@@ -114,7 +120,9 @@ zol.download: 可设置为 true / false，ZOL壁纸图片是否下载
 如果您喜欢一日更换多次桌面壁纸；可设置桌面壁纸来源于 baidu 或 zol，程序配置如下：
 
 {
-  "sort": "baidu",
+  "sort": [
+    "baidu"
+  ],
   "baidu": {
     "word": [
       "壁纸"
@@ -124,12 +132,14 @@ zol.download: 可设置为 true / false，ZOL壁纸图片是否下载
 }
 
 {
-  "sort": "zol",
+  "sort":  [
+    "zol"
+  ],
   "zol": {
     "sort": [
       "全部"
     ],
-    "download": false
+    "download": true
   }
 }
 ```

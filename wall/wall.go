@@ -1,6 +1,7 @@
 package wall
 
 import (
+	"github.com/reujab/wallpaper"
 	"io"
 	"io/ioutil"
 	"log"
@@ -9,8 +10,8 @@ import (
 	"os"
 	"os/exec"
 	"path/filepath"
+	"strings"
 	"time"
-	"github.com/reujab/wallpaper"
 )
 
 func GetCurrentPath() string {
@@ -45,17 +46,28 @@ func DownloadImage(url string, filename string) {
 	defer SetRandomWall()
 
 	filepath := GetWallpaperSavePath()
-
 	dirExists, err := exists(filepath)
 	if err != nil {
 		panic(err)
 	}
-
 	if !dirExists {
 		err = os.Mkdir(filepath, 0777)
-
 		if err != nil {
 			panic(err)
+		}
+	}
+
+	if strings.Index(filename, "/") != -1 {
+		secondPath := filepath + filename[:strings.Index(filename, "/")]
+		dirExists, err = exists(secondPath)
+		if err != nil {
+			panic(err)
+		}
+		if !dirExists {
+			err = os.Mkdir(secondPath, 0777)
+			if err != nil {
+				panic(err)
+			}
 		}
 	}
 
@@ -99,16 +111,36 @@ func exists(path string) (bool, error) {
 	return true, err
 }
 
-func GetRandomFile(path string) string {
-	files, _ := ioutil.ReadDir(path)
+func GetRandomFile(paths string) string {
+	files, _ := ioutil.ReadDir(paths)
 	if len(files) == 0 {
 		log.Fatal("未找到本地壁纸图片")
 	}
 
+	var lists []string
+
+	for _, file := range files {
+		if file.IsDir() == false {
+			lists = append(lists, paths+file.Name())
+			continue
+		}
+
+		filepath.Walk(paths+"/"+file.Name(), func(path string, fi os.FileInfo, err error) error {
+			if fi.IsDir() {
+				return nil
+			}
+			if err != nil {
+				return err
+			}
+			lists = append(lists, path)
+			return nil
+		})
+	}
+
 	rand.Seed(time.Now().Unix())
-	randIndex := rand.Intn(len(files))
-	log.Println("随机获取的壁纸文件为:" + files[randIndex].Name())
-	return path + files[randIndex].Name()
+	randIndex := rand.Intn(len(lists))
+	log.Println("随机获取的壁纸文件为:" + lists[randIndex])
+	return lists[randIndex]
 }
 
 func SetRandomWall() {

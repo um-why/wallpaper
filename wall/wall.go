@@ -72,31 +72,38 @@ func DownloadImage(url string, filename string) {
 	}
 
 	imageFilePath := filepath + filename
-	fileExists, err := exists(imageFilePath)
-	if !fileExists {
-		response, err := http.Get(url)
-		if err != nil {
-			panic(err)
-		}
-		defer response.Body.Close()
-
-		i := len(url) - 1
-		for i >= 0 && url[i] != '.' {
-			i--
-		}
-
-		file, err := os.Create(imageFilePath)
-		if err != nil {
-			panic(err)
-		}
-		defer file.Close()
-
-		_, err = io.Copy(file, response.Body)
-		if err != nil {
-			panic(err)
-		}
-	} else {
+	fileExists, _ := exists(imageFilePath)
+	if fileExists {
 		log.Println("图片已存在，跳过下载")
+		return
+	}
+
+	fileExists, _ = downloadexists(imageFilePath)
+	if fileExists {
+		log.Println("图片已存在，跳过下载.")
+		return
+	}
+
+	response, err := http.Get(url)
+	if err != nil {
+		panic(err)
+	}
+	defer response.Body.Close()
+
+	i := len(url) - 1
+	for i >= 0 && url[i] != '.' {
+		i--
+	}
+
+	file, err := os.Create(imageFilePath)
+	if err != nil {
+		panic(err)
+	}
+	defer file.Close()
+
+	_, err = io.Copy(file, response.Body)
+	if err != nil {
+		panic(err)
 	}
 }
 
@@ -109,6 +116,49 @@ func exists(path string) (bool, error) {
 		return false, nil
 	}
 	return true, err
+}
+
+func downloadexists(path string) (bool, error) {
+	fileName := path[strings.LastIndex(path, "/")+1:]
+
+	paths := GetWallpaperSavePath()
+
+	files, _ := ioutil.ReadDir(paths)
+	if len(files) == 0 {
+		return false, nil
+	}
+
+	var isExist = false
+	for _, file := range files {
+		if file.IsDir() == false {
+			if file.Name() == fileName {
+				isExist = true
+				break
+			}
+		}
+
+		filepath.Walk(paths+"/"+file.Name(), func(spath string, fi os.FileInfo, err error) error {
+			if fi.IsDir() {
+				return nil
+			}
+			if err != nil {
+				return nil
+			}
+			if isExist {
+				return filepath.SkipDir
+			}
+			if fi.Name() == fileName {
+				isExist = true
+				return filepath.SkipDir
+			}
+			return nil
+		})
+	}
+	if isExist {
+		return true, nil
+	} else {
+		return false, nil
+	}
 }
 
 func GetRandomFile(paths string) string {

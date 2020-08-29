@@ -1,3 +1,5 @@
 /.idea
 /.wall
 log.txt
+go.mod
+go.sum

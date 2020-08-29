@@ -134,5 +134,5 @@ func GetZolImageURL(sort string) (imgURL string, imgFilename string) {
 	cipherStr := h.Sum(nil)
 	imgFilename = hex.EncodeToString(cipherStr)
 
-	return imgURL, imgFilename + imgExt
+	return imgURL, "zol/" + imgFilename + imgExt
 }

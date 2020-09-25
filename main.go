@@ -2,10 +2,10 @@ package main
 
 import (
 	"encoding/json"
+	rw "github.com/reujab/wallpaper"
 	"io/ioutil"
 	"log"
 	"wallpaper/wall"
-	rw "github.com/reujab/wallpaper"
 )
 
 type Config struct {
@@ -13,6 +13,7 @@ type Config struct {
 	Bing  ConfigBing
 	Baidu ConfigBaidu
 	Zol   ConfigZol
+	Sogou ConfigSogou
 	Log   bool
 }
 type ConfigBing struct {
@@ -24,6 +25,11 @@ type ConfigBaidu struct {
 }
 
 type ConfigZol struct {
+	Sort     []string
+	Download bool
+}
+
+type ConfigSogou struct {
 	Sort     []string
 	Download bool
 }
@@ -90,6 +96,15 @@ func main() {
 		sort := wall.GetRandomWord(setting.Zol.Sort)
 		url, filename := wall.GetZolImageURL(sort)
 		if setting.Zol.Download == false {
+			rw.SetFromURL(url)
+		} else {
+			wall.DownloadImage(url, filename)
+			rw.SetFromFile(wall.GetWallpaperSavePath() + filename)
+		}
+	case "sogou":
+		sort := wall.GetRandomWord(setting.Sogou.Sort)
+		url, filename := wall.GetSogouImageURL(sort)
+		if setting.Sogou.Download == false {
 			rw.SetFromURL(url)
 		} else {
 			wall.DownloadImage(url, filename)

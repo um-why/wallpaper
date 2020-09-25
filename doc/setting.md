@@ -7,7 +7,8 @@
   "sort": [
     "bing",
     "baidu",
-    "zol"
+    "zol",
+    "sogou"
   ],
   "bing": {
     "mode": "random"
@@ -32,6 +33,16 @@
     ],
     "download": true
   },
+  "sogou": {
+    "sort": [
+      "美女",
+      "动漫",
+      "风景",
+      "小清新",
+      "动态"
+    ],
+    "download": true
+  },
   "log": true
 }
 ```
@@ -40,10 +51,11 @@
 ```
 第一级设置项：
 
-sort: 可设置为 baidu / bing / zol ， 壁纸来源
+sort: 可设置为 baidu / bing / zol / sogou ， 壁纸来源
 bing: sort = bing 时本项生效
 baidu: sort = baidu 时本项生效
 bing: sort = zol 时本项生效
+sogou: sort = sogou 时本项生效
 log: 可设置为 true / false ， 是否记录程序运行日志
 ```
 
@@ -72,3 +84,11 @@ zol.download: 可设置为 true / false，ZOL壁纸图片是否下载
 ```
 
 关于ZOL壁纸分类的设置，我也提供了文档说明，有兴趣可以查看 [ZOL壁纸分类](zol.md "ZOL壁纸分类设置")
+
+```
+第二级sogou设置项:
+sogou.sort: SOGOU壁纸分类；
+sogou.download: 可设置为 true / false，SOGOU壁纸图片是否下载
+```
+
+关于SOGOU壁纸分类的设置，有兴趣可以查看 [SOGOU壁纸分类](sogou.md "SOGOU壁纸分类设置")

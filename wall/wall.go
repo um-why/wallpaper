@@ -177,7 +177,11 @@ func GetRandomFile(paths string) string {
 
 		filepath.Walk(paths+"/"+file.Name(), func(path string, fi os.FileInfo, err error) error {
 			if fi.IsDir() {
-				return nil
+				if fi.Name() == ".del" {
+					return filepath.SkipDir
+				} else {
+					return nil
+				}
 			}
 			if err != nil {
 				return err

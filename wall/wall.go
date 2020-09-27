@@ -74,7 +74,8 @@ func DownloadImage(url string, filename string) {
 	imageFilePath := filepath + filename
 	fileExists, _ := exists(imageFilePath)
 	if fileExists {
-		panic("图片已存在，跳过下载")
+		log.Println("图片已存在，跳过下载")
+		return
 	}
 
 	fileExists, _ = downloadexists(imageFilePath)
